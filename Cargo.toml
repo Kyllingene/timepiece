@@ -6,7 +6,7 @@ edition = "2021"
 description = "A command-line all-purpose timepiece"
 repository = "https://github.com/kyllingene/timepiece"
 authors = ["Kyllingene"]
-license = "mit"
+license = "MIT"
 
 [dependencies]
 chrono = "0.4"
