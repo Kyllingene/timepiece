@@ -1,14 +1,13 @@
+mod clock;
 mod common;
 mod format;
-mod timer;
 mod parse;
 mod print;
 mod stopwatch;
+mod timer;
 
-use std::process::exit;
 use std::env;
-
-use chrono::Local;
+use std::process::exit;
 
 fn main() {
     let mut args = env::args();
@@ -23,36 +22,26 @@ fn main() {
             "  time             : print the current time",
             "  date             : print the current date",
             "  now              : print the current date + time",
-
+            "  clock            : continuously print the current date + time",
             "  timer <duration> : set a timer for <duration>",
             "                     format: [[[<hours>:]<minutes>:]<seconds>]",
             "                     rings the terminal BEL when the timer stops",
-
             "  alarm <time>     : set an alarm for <time> in the present day",
             "                     format: [[[<hours>:]<minutes>:]<seconds>] AM|PM",
             "                     rings the terminal BEL when the timer stops",
-
             "  stopwatch        : start a stopwatch",
             "                     press Ctrl+C to stop, Enter to lap",
-        ].iter().for_each(|s| println!("{s}"));
+        ]
+        .iter()
+        .for_each(|s| println!("{s}"));
         return;
     }
 
     match args[0].as_str() {
-        "time" => {
-            let now = Local::now();
-            println!("{}", format::time::time(&now));
-        }
-
-        "date" => {
-            let now = Local::now();
-            println!("{}", format::time::date(&now));
-        }
-
-        "now" => {
-            let now = Local::now();
-            println!("{} {}", format::time::date(&now), format::time::time(&now));
-        }
+        "time" => clock::time(),
+        "date" => clock::date(),
+        "now" => clock::now(),
+        "clock" => clock::clock(),
 
         "timer" => {
             if args.len() != 2 {

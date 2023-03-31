@@ -1,4 +1,4 @@
-use chrono::{Duration, Local, DateTime, Datelike, TimeZone};
+use chrono::{DateTime, Datelike, Duration, Local, TimeZone};
 
 pub fn time(t: &str) -> Option<DateTime<Local>> {
     let (hours, t) = t.split_once(':')?;
@@ -9,7 +9,7 @@ pub fn time(t: &str) -> Option<DateTime<Local>> {
         "am" | "a" => 0,
         "pm" | "p" => 12,
 
-        _ => return None
+        _ => return None,
     };
 
     let hours: u32 = hours.parse().ok()?;
@@ -17,14 +17,16 @@ pub fn time(t: &str) -> Option<DateTime<Local>> {
     let seconds: u32 = seconds.parse().ok()?;
 
     let now = Local::now();
-    Local.with_ymd_and_hms(
-        now.year(),
-        now.month(),
-        now.day(),
-        hours + pm,
-        minutes,
-        seconds
-    ).earliest()
+    Local
+        .with_ymd_and_hms(
+            now.year(),
+            now.month(),
+            now.day(),
+            hours + pm,
+            minutes,
+            seconds,
+        )
+        .earliest()
 }
 
 pub fn dur(t: &str) -> Option<Duration> {
@@ -58,7 +60,7 @@ pub fn dur(t: &str) -> Option<Duration> {
             seconds = increments[2];
         }
 
-        _ => return None
+        _ => return None,
     }
 
     let hours: i64 = hours.parse().ok()?;
