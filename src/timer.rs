@@ -18,7 +18,7 @@ pub fn timer(duration: Duration) {
         erase();
     }
 
-    println!("\x07Timer complete");
+    println!("\x07Timer for {} complete", format::dur::time(&duration));
 }
 
 pub fn alarm(time: DateTime<Local>) {
