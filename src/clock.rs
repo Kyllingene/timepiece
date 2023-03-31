@@ -1,4 +1,4 @@
-use chrono::Local;
+use chrono::{Local, Duration};
 
 use crate::common::sleep;
 use crate::format;
@@ -20,9 +20,12 @@ pub fn now() {
 }
 
 pub fn clock() {
+    let mut time = Local::now();
+    let second = Duration::seconds(1);
     loop {
         erase();
-        now();
-        sleep(0.5);
+        println!("{} {}", format::time::date(&time), format::time::time(&time));
+        sleep(1.0);
+        time += second;
     }
 }
