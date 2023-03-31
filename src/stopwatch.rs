@@ -13,7 +13,7 @@ pub fn stopwatch() {
         start = Local::now();
 
         println!("  {}", dur::accurate(&time));
-        sleep(0.05);
+        sleep(0.001);
         erase();
     }
 }
