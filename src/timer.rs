@@ -13,9 +13,9 @@ pub fn timer(duration: Duration) {
             break;
         }
 
-        erase();
         println!("  {}", dur::time(&(now - start - duration)));
         sleep(0.5);
+        erase();
     }
 
     erase();
@@ -29,9 +29,9 @@ pub fn alarm(time: DateTime<Local>) {
             break;
         }
 
-        erase();
         println!("  {}", dur::time(&(time - now)));
         sleep(0.5);
+        erase();
     }
 
     erase();

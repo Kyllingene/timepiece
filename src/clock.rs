@@ -21,11 +21,21 @@ pub fn now() {
 
 pub fn clock() {
     let mut time = Local::now();
+    let mut elapsed = Duration::zero();
+
     let second = Duration::seconds(1);
+    let minute = Duration::minutes(1);
     loop {
-        erase();
         println!("{} {}", format::time::date(&time), format::time::time(&time));
         sleep(1.0);
         time += second;
+        elapsed = elapsed + second;
+
+        if elapsed >= minute {
+            elapsed = Duration::zero();
+            time = Local::now();
+        }
+
+        erase();
     }
 }
