@@ -6,7 +6,7 @@ use crate::print::erase;
 
 pub fn timer(duration: Duration) {
     let start = Local::now();
-    let mut time = start.clone();
+    let mut time = start;
     let mut elapsed = Duration::zero();
 
     let second = Duration::seconds(1);

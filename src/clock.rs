@@ -1,4 +1,4 @@
-use chrono::{Local, Duration};
+use chrono::{Duration, Local};
 
 use crate::common::sleep;
 use crate::format;
@@ -26,7 +26,11 @@ pub fn clock() {
     let second = Duration::seconds(1);
     let minute = Duration::minutes(1);
     loop {
-        println!("{} {}", format::time::date(&time), format::time::time(&time));
+        println!(
+            "{} {}",
+            format::time::date(&time),
+            format::time::time(&time)
+        );
         sleep(1.0);
         time += second;
         elapsed = elapsed + second;
