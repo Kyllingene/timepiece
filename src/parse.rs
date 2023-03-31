@@ -17,26 +17,49 @@ pub fn time(t: &str) -> Option<DateTime<Local>> {
     let seconds: u32 = seconds.parse().ok()?;
 
     let now = Local::now();
-    Some(Local.with_ymd_and_hms(
+    Local.with_ymd_and_hms(
         now.year(),
         now.month(),
         now.day(),
         hours + pm,
         minutes,
         seconds
-    ).earliest()?)
+    ).earliest()
 }
 
 pub fn dur(t: &str) -> Option<Duration> {
-    let increments = t.split(":").collect::<Vec<&str>>();
+    let increments = t.split(':').collect::<Vec<&str>>();
 
-    if increments.len() > 3 {
-        return None;
+    let hours;
+    let minutes;
+    let seconds;
+    match increments.len() {
+        0 => {
+            hours = "0";
+            minutes = "0";
+            seconds = "0";
+        }
+
+        1 => {
+            hours = "0";
+            minutes = "0";
+            seconds = increments[0];
+        }
+
+        2 => {
+            hours = "0";
+            minutes = increments[0];
+            seconds = increments[1];
+        }
+
+        3 => {
+            hours = increments[0];
+            minutes = increments[1];
+            seconds = increments[2];
+        }
+
+        _ => return None
     }
-
-    let hours = increments.get(0).unwrap_or(&"0");
-    let minutes = increments.get(1).unwrap_or(&"0");
-    let seconds = increments.get(2).unwrap_or(&"0");
 
     let hours: i64 = hours.parse().ok()?;
     let minutes: i64 = minutes.parse().ok()?;

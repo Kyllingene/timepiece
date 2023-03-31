@@ -15,7 +15,7 @@ fn main() {
     let binary = args.next().unwrap_or("rssg".to_string());
     let mut args: Vec<String> = args.collect();
 
-    if args.len() == 0 || args[0].as_str() == "help" {
+    if args.is_empty() || args[0].as_str() == "help" {
         println!("usage: {binary} [options] <command>");
         vec![
             "commands:",
@@ -25,11 +25,11 @@ fn main() {
             "  now              : print the current date + time",
 
             "  timer <duration> : set a timer for <duration>",
-            "                     time format: <hours>:<minutes>:<seconds>",
+            "                     format: [[[<hours>:]<minutes>:]<seconds>]",
             "                     rings the terminal BEL when the timer stops",
 
             "  alarm <time>     : set an alarm for <time> in the present day",
-            "                     time format: <hours>:<minutes>:<seconds> AM|PM",
+            "                     format: [[[<hours>:]<minutes>:]<seconds>] AM|PM",
             "                     rings the terminal BEL when the timer stops",
 
             "  stopwatch        : start a stopwatch",
@@ -51,7 +51,7 @@ fn main() {
 
         "now" => {
             let now = Local::now();
-            println!("{} {}", format::time::time(&now), format::time::date(&now));
+            println!("{} {}", format::time::date(&now), format::time::time(&now));
         }
 
         "timer" => {
