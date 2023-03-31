@@ -15,5 +15,7 @@
 
 ### Non-features:
  - Actual user input (it just uses generic terminal behavior)
- - Background/invisible timers/alarms (use `tp ... &`)
+ - Background/invisible timers/alarms (make a shim)
  - Configuration of any sort (edit the source, I suppose)
+
+### If you want this name on crates.io, [contact me!](mailto:fuzzymuffin343@gmail.com)
