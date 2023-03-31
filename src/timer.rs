@@ -18,7 +18,6 @@ pub fn timer(duration: Duration) {
         erase();
     }
 
-    erase();
     println!("\x07Timer complete");
 }
 
@@ -34,6 +33,5 @@ pub fn alarm(time: DateTime<Local>) {
         erase();
     }
 
-    erase();
     println!("\x07Alarm for {} complete", format::time::time(&time));
 }
