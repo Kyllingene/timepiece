@@ -4,7 +4,7 @@ fn up() {
 }
 
 #[inline]
-fn back() {
+pub fn back() {
     print!("\r");
 }
 

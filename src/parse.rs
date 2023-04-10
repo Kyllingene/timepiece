@@ -5,7 +5,7 @@ pub fn time(t: &str) -> Option<DateTime<Local>> {
     let (minutes, t) = t.split_once(':')?;
     let (seconds, pm) = t.split_once(' ')?;
 
-    let pm: u32 = match pm.to_lowercase().as_str() {
+    let mut pm: u32 = match pm.to_lowercase().as_str() {
         "am" | "a" => 0,
         "pm" | "p" => 12,
 
@@ -16,15 +16,18 @@ pub fn time(t: &str) -> Option<DateTime<Local>> {
     let minutes: u32 = minutes.parse().ok()?;
     let seconds: u32 = seconds.parse().ok()?;
 
+    if hours == 12 && pm == 12 {
+        pm = 0;
+    }
+
     let now = Local::now();
-    Local
-        .with_ymd_and_hms(
+    Local.with_ymd_and_hms(
             now.year(),
             now.month(),
             now.day(),
             hours + pm,
             minutes,
-            seconds,
+            seconds
         )
         .earliest()
 }

@@ -1,6 +1,6 @@
 [package]
 name = "timepiece"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2021"
 
 description = "A command-line all-purpose timepiece"
@@ -10,6 +10,7 @@ license = "MIT"
 
 [dependencies]
 chrono = "0.4"
+console = "0.15.5"
 
 [[bin]]
 name = "tp"
