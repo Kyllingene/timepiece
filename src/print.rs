@@ -1,21 +1,19 @@
-use std::io::{Stdout, stdout};
+use std::io::{stdout, Stdout};
 
 use crossterm::cursor::{MoveToColumn, MoveToNextLine};
+use crossterm::execute;
 use crossterm::style::Print;
 use crossterm::terminal::{disable_raw_mode, enable_raw_mode, Clear, ClearType};
-use crossterm::execute;
 
 pub struct Printer {
-    stdout: Stdout
+    stdout: Stdout,
 }
 
 impl Printer {
     pub fn new() -> Self {
         let stdout = stdout();
         enable_raw_mode().unwrap();
-        Self {
-            stdout
-        }
+        Self { stdout }
     }
 
     /// Clear the line and print.
@@ -25,7 +23,8 @@ impl Printer {
             MoveToColumn(0),
             Clear(ClearType::CurrentLine),
             Print(s)
-        ).unwrap();
+        )
+        .unwrap();
     }
 
     /// Clear the line, print, and move down.
@@ -36,7 +35,8 @@ impl Printer {
             Clear(ClearType::CurrentLine),
             Print(s),
             MoveToNextLine(1)
-        ).unwrap();
+        )
+        .unwrap();
     }
 }
 

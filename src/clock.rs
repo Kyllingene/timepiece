@@ -56,11 +56,7 @@ pub fn clock() {
             }
         }
 
-        printer.print(format!(
-            "{} {}",
-            time::date(&time),
-            time::time(&time)
-        ));
+        printer.print(format!("{} {}", time::date(&time), time::time(&time)));
         sleep(1.0);
         time += second;
         elapsed = elapsed + second;

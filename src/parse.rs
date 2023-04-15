@@ -21,13 +21,14 @@ pub fn time(t: &str) -> Option<DateTime<Local>> {
     }
 
     let now = Local::now();
-    Local.with_ymd_and_hms(
+    Local
+        .with_ymd_and_hms(
             now.year(),
             now.month(),
             now.day(),
             hours + pm,
             minutes,
-            seconds
+            seconds,
         )
         .earliest()
 }

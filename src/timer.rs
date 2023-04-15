@@ -82,20 +82,17 @@ pub fn alarm(stop: DateTime<Local>) {
     let minute = Duration::minutes(1);
     loop {
         if poll(std::time::Duration::ZERO).unwrap() {
-            match read().unwrap() {
-                Event::Key(KeyEvent {
-                    code: KeyCode::Char('q') | KeyCode::Esc,
-                    kind: KeyEventKind::Press,
-                    ..
-                }) => {
-                    printer.erase(format!(
-                        "\x07Alarm for {} cancelled (time left: {})",
-                        time::time(&stop),
-                        dur::time(&(stop - time))
-                    ));
-                    break;
-                }
-                _ => (),
+            if let Event::Key(KeyEvent {
+                code: KeyCode::Char('q') | KeyCode::Esc,
+                kind: KeyEventKind::Press,
+                ..
+            }) = read().unwrap() {
+                printer.erase(format!(
+                    "\x07Alarm for {} cancelled (time left: {})",
+                    time::time(&stop),
+                    dur::time(&(stop - time))
+                ));
+                break;
             }
         }
 

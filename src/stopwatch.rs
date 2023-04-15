@@ -6,10 +6,10 @@ use crate::print::Printer;
 
 pub fn stopwatch() {
     let mut printer = Printer::new();
-    
+
     let mut time = Duration::zero();
     let mut start = Local::now();
-    
+
     let mut lap: u32 = 0;
     loop {
         time = time + (Local::now() - start);
