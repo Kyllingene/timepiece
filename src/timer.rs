@@ -84,7 +84,8 @@ pub fn alarm(stop: DateTime<Local>) {
                 code: KeyCode::Char('q') | KeyCode::Esc,
                 kind: KeyEventKind::Press,
                 ..
-            }) = read().unwrap() {
+            }) = read().unwrap()
+            {
                 printer.print(format!(
                     "\x07Alarm for {} cancelled (time left: {})",
                     time::time(&stop),
