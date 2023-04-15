@@ -1,5 +1,5 @@
-# timepiece
-## A command-line all-purpose timepiece
+# timepiece (`tp`)
+## Your command-line Rolex
 
 ### Features:
  - Get the current time (`tp time`), date (`tp date`), or both (`tp now`)
@@ -22,6 +22,7 @@
 
 ### Non-features:
  - Background/invisible timers/alarms (make a shim, possibly)
+   - This is because there don't seem to be any cross-platform fork libraries
  - Configuration of any sort (edit the source, not to sound like suckless)
 
 ### If you want this name on crates.io, [contact me!](mailto:fuzzymuffin343@gmail.com)
