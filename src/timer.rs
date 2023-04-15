@@ -3,7 +3,7 @@ use console::Key;
 
 use crate::common::{sleep, watch_keys};
 use crate::format::{dur, time};
-use crate::print::{erase, back};
+use crate::print::erase;
 
 pub fn timer(duration: Duration) {
     let (handle, keys) = watch_keys();
@@ -16,8 +16,6 @@ pub fn timer(duration: Duration) {
 
     let second = Duration::seconds(1);
     let minute = Duration::minutes(1);
-
-    back();
     loop {
         if let Ok(key) = keys.try_recv() {
             match key {
@@ -78,8 +76,6 @@ pub fn alarm(stop: DateTime<Local>) {
 
     let second = Duration::seconds(1);
     let minute = Duration::minutes(1);
-
-    back();
     loop {
         if let Ok(key) = keys.try_recv() {
             match key {

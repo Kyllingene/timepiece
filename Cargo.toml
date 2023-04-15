@@ -5,6 +5,10 @@ edition = "2021"
 
 description = "A command-line all-purpose timepiece"
 repository = "https://github.com/kyllingene/timepiece"
+
+categories = ["date-and-time"]
+keywords = ["stopwatch", "alarm", "time", "command-line", "clock"]
+
 authors = ["Kyllingene"]
 license = "MIT"
 
