@@ -38,6 +38,7 @@ pub fn clock() {
                     kind: KeyEventKind::Press,
                     ..
                 }) => {
+                    println!();
                     break;
                 }
                 Event::Key(KeyEvent {
