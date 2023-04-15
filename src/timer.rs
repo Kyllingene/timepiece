@@ -35,7 +35,7 @@ pub fn timer(duration: Duration) {
                     kind: KeyEventKind::Press,
                     ..
                 }) => {
-                    printer.erase(format!(
+                    printer.print(format!(
                         "\x07Timer for {} cancelled ({} left)",
                         dur::time(&duration),
                         dur::time(&(time - start - duration))
@@ -68,8 +68,6 @@ pub fn timer(duration: Duration) {
             }
         }
     }
-
-    println!();
 }
 
 pub fn alarm(stop: DateTime<Local>) {
@@ -87,7 +85,7 @@ pub fn alarm(stop: DateTime<Local>) {
                 kind: KeyEventKind::Press,
                 ..
             }) = read().unwrap() {
-                printer.erase(format!(
+                printer.print(format!(
                     "\x07Alarm for {} cancelled (time left: {})",
                     time::time(&stop),
                     dur::time(&(stop - time))
@@ -96,7 +94,7 @@ pub fn alarm(stop: DateTime<Local>) {
             }
         }
 
-        printer.print(format!(" {}", dur::time(&(stop - time))));
+        printer.erase(format!(" {}", dur::time(&(stop - time))));
         sleep(1.0);
 
         time += second;
@@ -117,6 +115,4 @@ pub fn alarm(stop: DateTime<Local>) {
             }
         }
     }
-
-    println!();
 }
