@@ -1,12 +1,12 @@
 use chrono::{DateTime, Duration, Local};
-use console::Key;
+use crossterm::event::{poll, read, Event, KeyCode, KeyEvent, KeyEventKind};
 
-use crate::common::{sleep, watch_keys};
+use crate::common::sleep;
 use crate::format::{dur, time};
-use crate::print::erase;
+use crate::print::Printer;
 
 pub fn timer(duration: Duration) {
-    let (handle, keys) = watch_keys();
+    let mut printer = Printer::new();
 
     let mut start = Local::now();
     let mut time = start;
@@ -17,28 +17,32 @@ pub fn timer(duration: Duration) {
     let second = Duration::seconds(1);
     let minute = Duration::minutes(1);
     loop {
-        if let Ok(key) = keys.try_recv() {
-            match key {
-                Key::Escape | Key::Char('q') => {
-                    println!(
-                        "\x07Timer for {} cancelled (time left: {})",
-                        dur::time(&duration),
-                        dur::time(&(time - start - duration))
-                    );
-                    handle.join().unwrap();
-                    return;
-                }
-
-                Key::Enter | Key::Char(' ') | Key::Char('p') => {
-                    if paused {
-                        erase();
-                    } else {
-                        println!(" {} PAUSED", dur::time(&(time - start - duration)));
+        if poll(std::time::Duration::ZERO).unwrap() {
+            match read().unwrap() {
+                Event::Key(KeyEvent {
+                    code: KeyCode::Char('p') | KeyCode::Char(' '),
+                    kind: KeyEventKind::Press,
+                    ..
+                }) => {
+                    if !paused {
+                        printer.erase(format!(" {} PAUSED", dur::time(&(time - start - duration))));
                     }
 
                     paused = !paused;
                 }
-                _ => {}
+                Event::Key(KeyEvent {
+                    code: KeyCode::Char('q') | KeyCode::Esc,
+                    kind: KeyEventKind::Press,
+                    ..
+                }) => {
+                    printer.erase(format!(
+                        "\x07Timer for {} cancelled ({} left)",
+                        dur::time(&duration),
+                        dur::time(&(time - start - duration))
+                    ));
+                    break;
+                }
+                _ => (),
             }
         }
 
@@ -53,23 +57,23 @@ pub fn timer(duration: Duration) {
         sleep(1.0);
 
         if paused {
+            // TODO: could this cause problems if paused for a long period of time?
             start += second;
         } else {
-            println!(" {}", dur::time(&(time - start - duration)));
+            printer.erase(format!(" {}", dur::time(&(time - start - duration))));
 
             if time - start >= duration {
+                printer.print(format!("\x07Timer for {} complete", dur::time(&duration)));
                 break;
             }
-
-            erase();
         }
     }
 
-    println!("\x07Timer for {} complete", dur::time(&duration));
+    println!();
 }
 
 pub fn alarm(stop: DateTime<Local>) {
-    let (handle, keys) = watch_keys();
+    let mut printer = Printer::new();
 
     let mut time = Local::now();
     let mut elapsed = Duration::zero();
@@ -77,22 +81,25 @@ pub fn alarm(stop: DateTime<Local>) {
     let second = Duration::seconds(1);
     let minute = Duration::minutes(1);
     loop {
-        if let Ok(key) = keys.try_recv() {
-            match key {
-                Key::Escape | Key::Char('q') => {
-                    println!(
+        if poll(std::time::Duration::ZERO).unwrap() {
+            match read().unwrap() {
+                Event::Key(KeyEvent {
+                    code: KeyCode::Char('q') | KeyCode::Esc,
+                    kind: KeyEventKind::Press,
+                    ..
+                }) => {
+                    printer.erase(format!(
                         "\x07Alarm for {} cancelled (time left: {})",
                         time::time(&stop),
                         dur::time(&(stop - time))
-                    );
-                    handle.join().unwrap();
-                    return;
+                    ));
+                    break;
                 }
-                _ => {}
+                _ => (),
             }
         }
 
-        println!(" {}", dur::time(&(stop - time)));
+        printer.print(format!(" {}", dur::time(&(stop - time))));
         sleep(1.0);
 
         time += second;
@@ -108,12 +115,11 @@ pub fn alarm(stop: DateTime<Local>) {
             time = Local::now();
 
             if time >= stop {
+                printer.print(format!("\x07Alarm for {} complete", time::time(&stop)));
                 break;
             }
         }
-
-        erase();
     }
 
-    println!("\x07Alarm for {} complete", time::time(&stop));
+    println!();
 }

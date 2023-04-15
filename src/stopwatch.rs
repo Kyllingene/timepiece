@@ -1,12 +1,11 @@
 use chrono::{Duration, Local};
-use console::Key;
+use crossterm::event::{poll, read, Event, KeyCode, KeyEvent, KeyEventKind};
 
-use crate::common::watch_keys;
 use crate::format::dur;
-use crate::print::erase;
+use crate::print::Printer;
 
 pub fn stopwatch() {
-    let (handle, keys) = watch_keys();
+    let mut printer = Printer::new();
     
     let mut time = Duration::zero();
     let mut start = Local::now();
@@ -15,23 +14,30 @@ pub fn stopwatch() {
     loop {
         time = time + (Local::now() - start);
         start = Local::now();
-        if let Ok(key) = keys.try_recv() {
-            match key {
-                Key::Escape | Key::Char('q') => {
-                    println!(" {}", dur::accurate(&time));
+        if poll(std::time::Duration::ZERO).unwrap() {
+            match read().unwrap() {
+                Event::Key(KeyEvent {
+                    code: KeyCode::Char('q') | KeyCode::Esc,
+                    kind: KeyEventKind::Press,
+                    ..
+                }) => {
+                    printer.print(format!(" {}", dur::accurate(&time)));
                     break;
                 }
-                Key::Enter | Key::Char(' ') | Key::Char('l') => {
-                    println!(" == LAP {lap}: {}", dur::accurate(&time));
+                Event::Key(KeyEvent {
+                    code: KeyCode::Char(' ') | KeyCode::Char('l'),
+                    kind: KeyEventKind::Press,
+                    ..
+                }) => {
+                    printer.print(format!(" == LAP {lap}: {}", dur::accurate(&time)));
                     lap += 1;
                 }
                 _ => {}
             }
         }
 
-        println!(" {}", dur::accurate(&time));
-        erase();
+        printer.erase(format!(" {}", dur::accurate(&time)));
     }
 
-    handle.join().unwrap();
+    println!();
 }

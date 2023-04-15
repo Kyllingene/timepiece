@@ -1,9 +1,9 @@
 use chrono::{Duration, Local};
-use console::Key;
+use crossterm::event::{poll, read, Event, KeyCode, KeyEvent, KeyEventKind};
 
-use crate::common::{sleep, watch_keys};
+use crate::common::sleep;
 use crate::format::time;
-use crate::print::erase;
+use crate::print::Printer;
 
 pub fn time() {
     let now = Local::now();
@@ -21,7 +21,7 @@ pub fn now() {
 }
 
 pub fn clock() {
-    let (handle, keys) = watch_keys();
+    let mut printer = Printer::new();
 
     let mut time = Local::now();
     let mut elapsed = Duration::zero();
@@ -31,33 +31,36 @@ pub fn clock() {
     let second = Duration::seconds(1);
     let minute = Duration::minutes(1);
     loop {
-        if let Ok(key) = keys.try_recv() {
-            match key {
-                Key::Escape | Key::Char('q') => {
-                    println!(
-                        "{} {}",
-                        time::date(&time),
-                        time::time(&time)
-                    );
+        if poll(std::time::Duration::ZERO).unwrap() {
+            match read().unwrap() {
+                Event::Key(KeyEvent {
+                    code: KeyCode::Char('q') | KeyCode::Esc,
+                    kind: KeyEventKind::Press,
+                    ..
+                }) => {
                     break;
                 }
-                Key::Enter | Key::Char(' ') | Key::Char('l') => {
-                    println!(
+                Event::Key(KeyEvent {
+                    code: KeyCode::Char(' ') | KeyCode::Char('l'),
+                    kind: KeyEventKind::Press,
+                    ..
+                }) => {
+                    printer.print(format!(
                         " == LAP {lap}: {} {}",
                         time::date(&time),
                         time::time(&time)
-                    );
+                    ));
                     lap += 1;
                 }
                 _ => {}
             }
         }
 
-        println!(
+        printer.print(format!(
             "{} {}",
             time::date(&time),
             time::time(&time)
-        );
+        ));
         sleep(1.0);
         time += second;
         elapsed = elapsed + second;
@@ -66,9 +69,5 @@ pub fn clock() {
             elapsed = Duration::zero();
             time = Local::now();
         }
-
-        erase();
     }
-
-    handle.join().unwrap();
 }

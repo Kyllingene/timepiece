@@ -67,7 +67,6 @@ fn main() {
             }
 
             args = args.into_iter().skip(1).collect();
-            println!("{:?}", args.join(" "));
             let time = match parse::time(&args.join(" ")) {
                 Some(t) => t,
                 None => {
