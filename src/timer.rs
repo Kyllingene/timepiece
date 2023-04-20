@@ -69,7 +69,7 @@ pub fn timer(duration: Duration) {
                 elapsed = Duration::zero();
                 time = Local::now() - start;
             }
-    
+
             sleep(1.0);
 
             time = time + second;
