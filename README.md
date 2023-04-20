@@ -14,6 +14,8 @@
  - Set a timer (`tp timer [[[hours:]minutes:]seconds]`)
    - Cancel with <kbd>Escape</kbd> or <kbd>Q</kbd>
    - Pause/unpause with <kbd>Enter</kbd> or <kbd>Space</kbd>
+   - Add 10 seconds with <kbd>Right</kbd> or <kbd>A</kbd>
+   - Remove 10 seconds with <kbd>Left</kbd> or <kbd>D</kbd>
    - Rings using the BEL character
 
  - Set an alarm (`tp alarm hour:minute:second AM|PM`)

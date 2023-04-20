@@ -9,7 +9,7 @@ pub fn timer(duration: Duration) {
     let mut printer = Printer::new();
 
     let mut start = Local::now();
-    let mut time = start;
+    let mut time = Duration::zero();
     let mut elapsed = Duration::zero();
 
     let mut paused = false;
@@ -25,7 +25,7 @@ pub fn timer(duration: Duration) {
                     ..
                 }) => {
                     if !paused {
-                        printer.erase(format!(" {} PAUSED", dur::time(&(time - start - duration))));
+                        printer.erase(format!(" {} PAUSED", dur::time(&(time - duration))));
                     }
 
                     paused = !paused;
@@ -38,31 +38,44 @@ pub fn timer(duration: Duration) {
                     printer.print(format!(
                         "\x07Timer for {} cancelled ({} left)",
                         dur::time(&duration),
-                        dur::time(&(time - start - duration))
+                        dur::time(&(time - duration))
                     ));
                     break;
+                }
+                Event::Key(KeyEvent {
+                    code: KeyCode::Right | KeyCode::Char('a'),
+                    kind: KeyEventKind::Press,
+                    ..
+                }) => {
+                    time = time - (second * 10);
+                }
+                Event::Key(KeyEvent {
+                    code: KeyCode::Left | KeyCode::Char('d'),
+                    kind: KeyEventKind::Press,
+                    ..
+                }) => {
+                    time = time + (second * 10);
                 }
                 _ => (),
             }
         }
 
-        time += second;
-        elapsed = elapsed + second;
-
-        if elapsed >= minute {
-            elapsed = Duration::zero();
-            time = Local::now();
-        }
-
-        sleep(1.0);
-
         if paused {
-            // TODO: could this cause problems if paused for a long period of time?
             start += second;
         } else {
-            printer.erase(format!(" {}", dur::time(&(time - start - duration))));
+            elapsed = elapsed + second;
 
-            if time - start >= duration {
+            if elapsed >= minute {
+                elapsed = Duration::zero();
+                time = Local::now() - start;
+            }
+    
+            sleep(1.0);
+
+            time = time + second;
+            printer.erase(format!(" {}", dur::time(&(time - duration))));
+
+            if time >= duration {
                 printer.print(format!("\x07Timer for {} complete", dur::time(&duration)));
                 break;
             }
