@@ -1,3 +1,5 @@
+use std::io::{stdin, Read};
+
 use chrono::{Duration, Local};
 use crossterm::event::{poll, read, Event, KeyCode, KeyEvent, KeyEventKind};
 
@@ -40,4 +42,26 @@ pub fn stopwatch() {
     }
 
     println!();
+}
+
+pub fn stopwatch_notatty() {
+    let mut stdin = stdin().lock();
+    let mut buf = String::new();
+
+    let mut time = Duration::zero();
+    let mut start = Local::now();
+
+    loop {
+        time = time + (Local::now() - start);
+        start = Local::now();
+
+        if let Ok(0) = stdin.read_to_string(&mut buf) {
+            break;
+        }
+
+        println!("{buf}");
+        buf.clear();
+    }
+
+    println!("\n\nFinished in {} seconds", dur::accurate(&time));
 }

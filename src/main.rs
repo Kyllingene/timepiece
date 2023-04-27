@@ -30,7 +30,7 @@ fn main() {
             "                     format: [[[<hours>:]<minutes>:]<seconds>] AM|PM",
             "                     rings the terminal BEL when the timer stops",
             "  stopwatch        : start a stopwatch",
-            "                     press Ctrl+C to stop, Enter to lap",
+            "                     press Q to stop, Enter/Space to lap",
         ]
         .iter()
         .for_each(|s| println!("{s}"));
@@ -78,7 +78,13 @@ fn main() {
             timer::alarm(time);
         }
 
-        "stopwatch" => stopwatch::stopwatch(),
+        "stopwatch" => {
+            if atty::is(atty::Stream::Stdin) {
+                stopwatch::stopwatch();
+            } else {
+                stopwatch::stopwatch_notatty();
+            }
+        }
 
         s => {
             eprintln!("Unknown command: `{s}`");
