@@ -48,13 +48,8 @@ pub fn stopwatch_notatty() {
     let mut stdin = stdin().lock();
     let mut buf = String::new();
 
-    let mut time = Duration::zero();
-    let mut start = Local::now();
-
+    let start = Local::now();
     loop {
-        time = time + (Local::now() - start);
-        start = Local::now();
-
         if let Ok(0) = stdin.read_to_string(&mut buf) {
             break;
         }
@@ -63,5 +58,6 @@ pub fn stopwatch_notatty() {
         buf.clear();
     }
 
-    println!("\n\nFinished in {} seconds", dur::accurate(&time));
+    let now = Local::now();
+    println!("\n\nFinished in {} seconds", dur::accurate(&(now - start)));
 }
