@@ -10,7 +10,7 @@
  - Start a stopwatch (`tp stopwatch`)
    - Stop with <kbd>Escape</kbd> or <kbd>Q</kbd>
    - Lap with <kbd>Enter</kbd> or <kbd>Space</kbd>
-   - If piped (i.e. `sleep 5 | tp stopwatch`), times process while relaying stdin
+   - If piped (e.g. `sleep 5 | tp stopwatch`), times process while relaying stdin
 
  - Set a timer (`tp timer [[[hours:]minutes:]seconds]`)
    - Cancel with <kbd>Escape</kbd> or <kbd>Q</kbd>
