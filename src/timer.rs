@@ -8,11 +8,14 @@ use crate::print::Printer;
 pub fn timer(duration: Duration) {
     let mut printer = Printer::new();
 
+    let mut start = Local::now();
     let mut time = Duration::zero();
+    let mut elapsed = Duration::zero();
 
     let mut paused = false;
 
     let second = Duration::seconds(1);
+    let minute = Duration::minutes(1);
     loop {
         if poll(std::time::Duration::ZERO).unwrap() {
             match read().unwrap() {
@@ -57,7 +60,16 @@ pub fn timer(duration: Duration) {
             }
         }
 
-        if !paused {
+        if paused {
+            start += second;
+        } else {
+            elapsed = elapsed + second;
+
+            if elapsed >= minute {
+                elapsed = Duration::zero();
+                time = Local::now() - start;
+            }
+
             sleep(1.0);
 
             time = time + second;
