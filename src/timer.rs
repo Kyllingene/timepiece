@@ -6,6 +6,9 @@ use crate::format::{dur, time};
 use crate::print::Printer;
 
 pub fn timer(duration: Duration) {
+    print!("Timer started at ");
+    crate::clock::time();
+
     let mut printer = Printer::new();
 
     let mut time = Duration::zero();
@@ -72,6 +75,9 @@ pub fn timer(duration: Duration) {
 }
 
 pub fn alarm(stop: DateTime<Local>) {
+    print!("Alarm started at ");
+    crate::clock::time();
+
     let mut printer = Printer::new();
 
     let mut time = Local::now();

@@ -7,6 +7,9 @@ use crate::format::dur;
 use crate::print::Printer;
 
 pub fn stopwatch() {
+    print!("Stopwatch started at ");
+    crate::clock::time();
+
     let mut printer = Printer::new();
 
     let mut time = Duration::zero();
@@ -45,6 +48,9 @@ pub fn stopwatch() {
 }
 
 pub fn stopwatch_notatty() {
+    print!("Stopwatch started at ");
+    crate::clock::time();
+
     let mut stdin = stdin().lock();
     let mut buf = String::new();
 
