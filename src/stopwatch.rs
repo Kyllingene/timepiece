@@ -30,7 +30,7 @@ pub fn stopwatch() {
                     break;
                 }
                 Event::Key(KeyEvent {
-                    code: KeyCode::Char(' ') | KeyCode::Char('l'),
+                    code: KeyCode::Char(' ') | KeyCode::Char('l') | KeyCode::Enter,
                     kind: KeyEventKind::Press,
                     ..
                 }) => {

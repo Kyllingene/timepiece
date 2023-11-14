@@ -111,6 +111,9 @@ pub fn timer(duration: Duration) {
             }
         }
     }
+
+    print!("Timer finished at ");
+    crate::clock::time();
 }
 
 pub fn alarm(stop: DateTime<Local>) {
