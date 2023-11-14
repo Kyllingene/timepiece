@@ -23,6 +23,11 @@
    - Cancel with <kbd>Escape</kbd> or <kbd>Q</kbd>
    - Rings using the BEL character
 
+ - Enable desktop notifications with feature flag `notify`, for:
+   - Timers
+   - Alarms
+   - Piped stopwatches
+
 ### Non-features:
  - Background/invisible timers/alarms (make a shim, possibly)
    - This is because there don't seem to be any cross-platform fork libraries

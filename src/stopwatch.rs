@@ -2,6 +2,8 @@ use std::io::{stdin, Read};
 
 use chrono::{Duration, Local};
 use crossterm::event::{poll, read, Event, KeyCode, KeyEvent, KeyEventKind};
+
+#[cfg(feature = "notify")]
 use notify_rust::Notification;
 
 use crate::format::dur;

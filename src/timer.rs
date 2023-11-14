@@ -2,6 +2,8 @@ use std::sync::{Arc, Mutex};
 
 use chrono::{DateTime, Duration, Local};
 use crossterm::event::{poll, read, Event, KeyCode, KeyEvent, KeyEventKind};
+
+#[cfg(feature = "notify")]
 use notify_rust::Notification;
 
 use crate::common::sleep;
