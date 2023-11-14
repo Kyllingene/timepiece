@@ -105,7 +105,9 @@ pub fn timer(duration: Duration) {
 
             if state.time >= state.duration {
                 let dur = dur::time(&state.duration);
-                state.printer.print(format!("\x07Timer for {} complete", dur));
+                state
+                    .printer
+                    .print(format!("\x07Timer for {} complete", dur));
                 state.cancel = true;
                 break;
             }

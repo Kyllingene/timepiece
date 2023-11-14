@@ -65,5 +65,8 @@ pub fn stopwatch_notatty() {
     }
 
     let now = Local::now();
-    println!("\n\n\x07Finished in {} seconds", dur::accurate(&(now - start)));
+    println!(
+        "\n\n\x07Finished in {} seconds",
+        dur::accurate(&(now - start))
+    );
 }
