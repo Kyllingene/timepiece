@@ -14,7 +14,8 @@ fn main() {
     let binary = args.next().unwrap_or("rssg".to_string());
     let mut args: Vec<String> = args.collect();
 
-    if args.is_empty() || args[0].as_str() == "help" {
+    let help_commands = ["help", "-h", "--help"];
+    if args.is_empty() || help_commands.contains(&args[0].as_str()) {
         println!("usage: {binary} [options] <command>");
         vec![
             "commands:",
