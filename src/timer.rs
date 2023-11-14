@@ -2,6 +2,7 @@ use std::sync::{Arc, Mutex};
 
 use chrono::{DateTime, Duration, Local};
 use crossterm::event::{poll, read, Event, KeyCode, KeyEvent, KeyEventKind};
+use notify_rust::Notification;
 
 use crate::common::sleep;
 use crate::format::{dur, time};
@@ -43,10 +44,24 @@ fn read_keys(state: Arc<Mutex<TimerState>>) {
                 let left = &(state.time - state.duration);
                 let dur = dur::time(&state.duration);
                 state.printer.print(format!(
-                    "\x07Timer for {} cancelled ({} left)",
-                    dur,
+                    "\x07Timer for {dur} cancelled (time left: {})",
                     dur::time(left),
                 ));
+
+                #[cfg(feature = "notify")]
+                {
+                    if let Err(e) = Notification::new()
+                        .summary("Timer cancelled")
+                        .body(&format!(
+                            "Timer for {dur} cancelled\nTime left: {}",
+                            dur::time(left)
+                        ))
+                        .show()
+                    {
+                        eprintln!("Failed to send notification: {e}");
+                    }
+                }
+
                 state.cancel = true;
                 return;
             }
@@ -108,6 +123,21 @@ pub fn timer(duration: Duration) {
                 state
                     .printer
                     .print(format!("\x07Timer for {} complete", dur));
+
+                #[cfg(feature = "notify")]
+                {
+                    if let Err(e) = Notification::new()
+                        .summary("Timer complete")
+                        .body(&format!(
+                            "Timer for {dur} complete\nFinished at {}",
+                            time::time(&Local::now())
+                        ))
+                        .show()
+                    {
+                        eprintln!("Failed to send notification: {e}");
+                    }
+                }
+
                 state.cancel = true;
                 break;
             }
@@ -137,11 +167,23 @@ pub fn alarm(stop: DateTime<Local>) {
                 ..
             }) = read().unwrap()
             {
+                let left = dur::time(&(stop - time));
+                let time = time::time(&stop);
                 printer.print(format!(
-                    "\x07Alarm for {} cancelled (time left: {})",
-                    time::time(&stop),
-                    dur::time(&(stop - time))
+                    "\x07Alarm for {time} cancelled (time left: {left})",
                 ));
+
+                #[cfg(feature = "notify")]
+                {
+                    if let Err(e) = Notification::new()
+                        .summary("Alarm cancelled")
+                        .body(&format!("Alarm for {time} cancelled\nTime left: {left}"))
+                        .show()
+                    {
+                        eprintln!("Failed to send notification: {e}");
+                    }
+                }
+
                 break;
             }
         }
@@ -162,7 +204,20 @@ pub fn alarm(stop: DateTime<Local>) {
             time = Local::now();
 
             if time >= stop {
-                printer.print(format!("\x07Alarm for {} complete", time::time(&stop)));
+                let time = time::time(&stop);
+                printer.print(format!("\x07Alarm for {time} complete"));
+
+                #[cfg(feature = "notify")]
+                {
+                    if let Err(e) = Notification::new()
+                        .summary("Alarm complete")
+                        .body(&format!("Alarm for {time} complete"))
+                        .show()
+                    {
+                        eprintln!("Failed to show notification: {e}");
+                    }
+                }
+
                 break;
             }
         }

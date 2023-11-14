@@ -2,6 +2,7 @@ use std::io::{stdin, Read};
 
 use chrono::{Duration, Local};
 use crossterm::event::{poll, read, Event, KeyCode, KeyEvent, KeyEventKind};
+use notify_rust::Notification;
 
 use crate::format::dur;
 use crate::print::Printer;
@@ -65,8 +66,17 @@ pub fn stopwatch_notatty() {
     }
 
     let now = Local::now();
-    println!(
-        "\n\n\x07Finished in {} seconds",
-        dur::accurate(&(now - start))
-    );
+    let time = dur::accurate(&(now - start));
+    println!("\n\x07Finished in {time} seconds",);
+
+    #[cfg(feature = "notify")]
+    {
+        if let Err(e) = Notification::new()
+            .summary("Stopwatch finished")
+            .body(&format!("Stopwatch finished in {time} seconds"))
+            .show()
+        {
+            eprintln!("Failed to send notification: {e}");
+        }
+    }
 }

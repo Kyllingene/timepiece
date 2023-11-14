@@ -1,6 +1,6 @@
 [package]
 name = "timepiece"
-version = "0.6.3"
+version = "0.7.0"
 edition = "2021"
 
 description = "A command-line all-purpose timepiece"
@@ -16,6 +16,11 @@ license = "MIT"
 atty = "0.2"
 chrono = "0.4"
 crossterm = "0.26"
+notify-rust = { version = "4", optional = true }
+
+[features]
+default = []
+notify = ["dep:notify-rust"]
 
 [[bin]]
 name = "tp"
