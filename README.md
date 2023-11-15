@@ -28,6 +28,18 @@
    - Alarms
    - Piped stopwatches
 
+### Installation
+
+The best way to install, if you have `cargo` installed, is through that:
+
+```shell
+$ cargo install timepiece # add `--features notify` if you want desktop notifs
+```
+
+If you don't, you can find pre-built executables on 
+[the Github](https://github.com/kyllingene/timepiece/releases).
+*Note:* these binaries are built with the `notify` feature enabled.
+
 ### Non-features:
  - Background/invisible timers/alarms (make a shim, possibly)
    - This is because there don't seem to be any cross-platform fork libraries
