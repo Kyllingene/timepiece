@@ -73,8 +73,9 @@ fn read_keys(state: Arc<Mutex<TimerState>>) {
                 ..
             }) => {
                 state.time = state.time - (state.increment * 5);
+                let paused = state.paused;
                 let left = &(state.time - state.duration);
-                state.printer.erase(format!(" {}", dur::time(left)));
+                state.printer.erase(format!(" {}{}", dur::time(left), if paused { " PAUSED" } else { "" }));
             }
             Event::Key(KeyEvent {
                 code: KeyCode::Left | KeyCode::Char('d'),
@@ -82,8 +83,9 @@ fn read_keys(state: Arc<Mutex<TimerState>>) {
                 ..
             }) => {
                 state.time = state.time + (state.increment * 5);
+                let paused = state.paused;
                 let left = &(state.time - state.duration);
-                state.printer.erase(format!(" {}", dur::time(left)));
+                state.printer.erase(format!(" {}{}", dur::time(left), if paused { " PAUSED" } else { "" }));
             }
             _ => (),
         }
