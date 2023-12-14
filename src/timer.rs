@@ -23,8 +23,12 @@ struct TimerState {
 
 fn read_keys(state: Arc<Mutex<TimerState>>) {
     loop {
+        let t = state.lock().unwrap();
+        if t.cancel { break; }
+        drop(t);
         let key = read().unwrap();
         let mut state = state.lock().unwrap();
+        if state.cancel { break; }
         match key {
             Event::Key(KeyEvent {
                 code: KeyCode::Char('p') | KeyCode::Char(' '),
@@ -115,7 +119,7 @@ pub fn timer(duration: Duration) {
         let mut state = state.lock().unwrap();
         if !state.paused {
             if state.cancel {
-                break;
+                return;
             }
 
             state.time = state.time + state.increment;
