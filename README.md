@@ -1,5 +1,5 @@
 # timepiece (`tp`)
-## Your command-line Rolex
+![Your command-line Rolex](https://repository-images.githubusercontent.com/621942877/94dd7a7e-b876-41a6-9f32-67f134324247)
 
 ### Features:
  - Get the current time (`tp time`), date (`tp date`), or both (`tp now`)
