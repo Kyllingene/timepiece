@@ -24,11 +24,15 @@ struct TimerState {
 fn read_keys(state: Arc<Mutex<TimerState>>) {
     loop {
         let t = state.lock().unwrap();
-        if t.cancel { break; }
+        if t.cancel {
+            break;
+        }
         drop(t);
         let key = read().unwrap();
         let mut state = state.lock().unwrap();
-        if state.cancel { break; }
+        if state.cancel {
+            break;
+        }
         match key {
             Event::Key(KeyEvent {
                 code: KeyCode::Char('p') | KeyCode::Char(' '),
@@ -79,7 +83,11 @@ fn read_keys(state: Arc<Mutex<TimerState>>) {
                 state.time = state.time - (state.increment * 5);
                 let paused = state.paused;
                 let left = &(state.time - state.duration);
-                state.printer.erase(format!(" {}{}", dur::time(left), if paused { " PAUSED" } else { "" }));
+                state.printer.erase(format!(
+                    " {}{}",
+                    dur::time(left),
+                    if paused { " PAUSED" } else { "" }
+                ));
             }
             Event::Key(KeyEvent {
                 code: KeyCode::Left | KeyCode::Char('d'),
@@ -89,7 +97,11 @@ fn read_keys(state: Arc<Mutex<TimerState>>) {
                 state.time = state.time + (state.increment * 5);
                 let paused = state.paused;
                 let left = &(state.time - state.duration);
-                state.printer.erase(format!(" {}{}", dur::time(left), if paused { " PAUSED" } else { "" }));
+                state.printer.erase(format!(
+                    " {}{}",
+                    dur::time(left),
+                    if paused { " PAUSED" } else { "" }
+                ));
             }
             _ => (),
         }
@@ -117,11 +129,12 @@ pub fn timer(duration: Duration) {
     loop {
         sleep(1.0);
         let mut state = state.lock().unwrap();
-        if !state.paused {
-            if state.cancel {
-                return;
-            }
+        if state.cancel {
+            drop(state);
+            return;
+        }
 
+        if !state.paused {
             state.time = state.time + state.increment;
             let left = &(state.time - state.duration);
             state.printer.erase(format!(" {}", dur::time(left)));
