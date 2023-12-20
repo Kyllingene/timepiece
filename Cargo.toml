@@ -1,6 +1,6 @@
 [package]
 name = "timepiece"
-version = "0.7.5"
+version = "0.7.6"
 edition = "2021"
 
 description = "A command-line all-purpose timepiece"
